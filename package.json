@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@react-three/fiber": "^9.5.0",
     "framer-motion": "^12.36.0",
+    "gsap": "^3.14.2",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",

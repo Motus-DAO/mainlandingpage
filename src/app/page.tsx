@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import * as THREE from "three";
+import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import SpacetimeBackground from "../../components/three/SpacetimeBackground";
 
 function SectionReveal({
   children,
@@ -28,96 +28,6 @@ function SectionReveal({
   );
 }
 
-function HeroCanvas() {
-  const mountRef = useRef<HTMLDivElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onChange = () => setReducedMotion(mq.matches);
-    onChange();
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-
-  useEffect(() => {
-    if (reducedMotion) return;
-    if (!mountRef.current || !canvasRef.current) return;
-
-    const width = mountRef.current.clientWidth;
-    const height = mountRef.current.clientHeight;
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-    camera.position.z = 6;
-
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef.current,
-      alpha: true,
-      antialias: true,
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    const particlesCount = 2000;
-    const positions = new Float32Array(particlesCount * 3);
-
-    for (let i = 0; i < particlesCount * 3; i++) {
-      positions[i] = (Math.random() - 0.5) * 16;
-    }
-
-    const particlesGeometry = new THREE.BufferGeometry();
-    particlesGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-
-    const particlesMaterial = new THREE.PointsMaterial({
-      color: 0x9333ea,
-      size: 0.025,
-      transparent: true,
-      opacity: 0.6,
-    });
-
-    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particles);
-
-    const onResize = () => {
-      if (!mountRef.current) return;
-      const w = mountRef.current.clientWidth;
-      const h = mountRef.current.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    };
-
-    let frame = 0;
-    const animate = () => {
-      frame = requestAnimationFrame(animate);
-      particles.rotation.y += 0.0002;
-      particles.rotation.x += 0.0001;
-      renderer.render(scene, camera);
-    };
-
-    animate();
-    window.addEventListener("resize", onResize);
-
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("resize", onResize);
-      particlesGeometry.dispose();
-      particlesMaterial.dispose();
-      renderer.dispose();
-    };
-  }, [reducedMotion]);
-
-  if (reducedMotion) return null;
-
-  return (
-    <div ref={mountRef} className="absolute inset-0 z-0 pointer-events-none">
-      <canvas ref={canvasRef} className="h-full w-full" />
-    </div>
-  );
-}
-
 export default function Home() {
   const proofRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({ target: proofRef, offset: ["start end", "end start"] });
@@ -125,14 +35,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#000000] text-[#f5f5ff]">
+      <SpacetimeBackground colorTheme="dark">
       <section className="relative flex min-h-screen items-center overflow-hidden px-6 py-24 md:px-12">
-        <HeroCanvas />
-        <div className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(circle 600px at 30% 40%, rgba(147,51,234,0.18), transparent 70%), radial-gradient(circle 400px at 70% 60%, rgba(236,72,153,0.12), transparent 70%)",
-          }} />
-
         <motion.div
           className="relative z-10 mx-auto max-w-5xl text-center"
           initial={{ opacity: 0 }}
@@ -222,6 +126,7 @@ export default function Home() {
           </motion.div>
         </motion.div>
       </section>
+      </SpacetimeBackground>
 
       <section className="mx-auto grid max-w-6xl gap-5 px-6 py-16 md:grid-cols-3 md:px-12">
         {[
