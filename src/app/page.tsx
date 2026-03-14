@@ -70,28 +70,6 @@ function HeroCanvas() {
     const particles = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particles);
 
-    const helixPoints: THREE.Vector3[] = [];
-    for (let i = 0; i < 260; i++) {
-      const t = i / 260;
-      helixPoints.push(
-        new THREE.Vector3(
-          Math.sin(t * Math.PI * 10) * 1.6,
-          (t - 0.5) * 10,
-          Math.cos(t * Math.PI * 10) * 1.6,
-        ),
-      );
-    }
-
-    const curve = new THREE.CatmullRomCurve3(helixPoints);
-    const helixGeo = new THREE.TubeGeometry(curve, 260, 0.03, 8, false);
-    const helixMat = new THREE.MeshBasicMaterial({
-      color: 0xec4899,
-      transparent: true,
-      opacity: 0.45,
-    });
-    const helix = new THREE.Mesh(helixGeo, helixMat);
-    scene.add(helix);
-
     const onResize = () => {
       if (!mountRef.current) return;
       const w = mountRef.current.clientWidth;
@@ -106,7 +84,6 @@ function HeroCanvas() {
       frame = requestAnimationFrame(animate);
       particles.rotation.y += 0.00035;
       particles.rotation.x += 0.0001;
-      helix.rotation.y += 0.002;
       renderer.render(scene, camera);
     };
 
@@ -118,8 +95,6 @@ function HeroCanvas() {
       window.removeEventListener("resize", onResize);
       particlesGeometry.dispose();
       particlesMaterial.dispose();
-      helixGeo.dispose();
-      helixMat.dispose();
       renderer.dispose();
     };
   }, []);
@@ -138,9 +113,18 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#000000] text-[#f5f5ff]">
+      <style jsx>{`
+        .hero-headline {
+          font-family: 'Jura', sans-serif !important;
+        }
+      `}</style>
       <section className="relative flex min-h-screen items-center overflow-hidden px-6 py-24 md:px-12">
         <HeroCanvas />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(147,51,234,0.22),transparent_42%),radial-gradient(circle_at_bottom_left,rgba(236,72,153,0.2),transparent_46%),radial-gradient(circle_at_40%_60%,rgba(0,229,255,0.12),transparent_52%)]" />
+        <div className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(60% 60% at 20% 20%, rgba(99, 102, 241, 0.18), transparent 60%), radial-gradient(60% 60% at 80% 30%, rgba(236, 72, 153, 0.16), transparent 60%), radial-gradient(70% 70% at 50% 80%, rgba(147, 51, 234, 0.18), transparent 60%)",
+          }} />
 
         <motion.div
           className="relative z-10 mx-auto max-w-5xl text-center"
@@ -161,7 +145,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
-            className="mx-auto max-w-4xl text-4xl font-extrabold leading-tight md:text-7xl"
+            className="hero-headline mx-auto max-w-4xl text-4xl font-extrabold leading-tight md:text-7xl"
             style={{ fontFamily: "Jura, sans-serif" }}
           >
             Reduce Operational Drag. Protect Client Trust. Scale Your Practice.
@@ -203,13 +187,18 @@ export default function Home() {
           >
             {[
               ["100+", "Psychologists onboarded"],
-              ["$700/mo", "Transaction volume"],
+              ["$700/mo", "Volumen mensual"],
               ["2", "Active chains"],
               ["Live", "Shipping cadence"],
             ].map(([value, label]) => (
               <div
                 key={label}
-                className="rounded-xl border border-white/15 bg-[linear-gradient(135deg,rgba(255,255,255,0.1)_0%,rgba(255,255,255,0.05)_100%)] px-4 py-3 backdrop-blur-[20px]"
+                className="rounded-xl px-4 py-3"
+                style={{
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  backdropFilter: "blur(20px)",
+                }}
               >
                 <p className="text-2xl font-bold text-[#f0a4ff]" style={{ fontFamily: "Jura, sans-serif" }}>{value}</p>
                 <p className="text-xs text-white/70" style={{ fontFamily: "Inter, sans-serif" }}>{label}</p>
