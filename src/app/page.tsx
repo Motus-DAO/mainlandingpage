@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import SpacetimeBackground from "../../components/three/SpacetimeBackground";
+import SpacetimeBackground from "@/components/three/SpacetimeBackground";
 
 function SectionReveal({
   children,
