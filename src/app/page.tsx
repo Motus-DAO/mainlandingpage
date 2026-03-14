@@ -137,40 +137,43 @@ export default function Home() {
   const y = useTransform(scrollYProgress, [0, 1], [-40, 40]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-[#f5f5ff]">
+    <div className="min-h-screen bg-[#000000] text-[#f5f5ff]">
       <section className="relative flex min-h-screen items-center overflow-hidden px-6 py-24 md:px-12">
         <HeroCanvas />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(147,51,234,0.25),transparent_40%),radial-gradient(circle_at_bottom_left,rgba(236,72,153,0.22),transparent_45%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(147,51,234,0.22),transparent_42%),radial-gradient(circle_at_bottom_left,rgba(236,72,153,0.2),transparent_46%),radial-gradient(circle_at_40%_60%,rgba(0,229,255,0.12),transparent_52%)]" />
 
         <motion.div
           className="relative z-10 mx-auto max-w-5xl text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
         >
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.7 }}
+            transition={{ delay: 0.1, duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
             className="mb-5 text-sm uppercase tracking-[0.28em] text-[#b8a8ff]"
+            style={{ fontFamily: "Jura, sans-serif" }}
           >
-            MotusDAO • Clinical Futurism
+            MotusDAO • AI-Human Mental Health Infrastructure
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.9 }}
+            transition={{ delay: 0.2, duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
             className="mx-auto max-w-4xl text-4xl font-extrabold leading-tight md:text-7xl"
+            style={{ fontFamily: "Jura, sans-serif" }}
           >
-            The Operating System for Modern Mental Health Practices
+            Reduce Operational Drag. Protect Client Trust. Scale Your Practice.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 0.9 }}
+            transition={{ delay: 0.35, duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
             className="mx-auto mt-6 max-w-2xl text-lg text-[#ddd6ff] md:text-xl"
+            style={{ fontFamily: "Inter, sans-serif" }}
           >
-            AI-powered workflows, privacy-first architecture, and cross-chain coordination designed for psychologists who need clarity and speed.
+            MotusDAO gives independent psychologists in LATAM one system for AI-assisted workflows, privacy-first data handling, and cross-chain payment coordination.
           </motion.p>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
@@ -179,16 +182,40 @@ export default function Home() {
               whileTap={{ scale: 0.97 }}
               href="#cta"
               className="rounded-full bg-gradient-to-r from-[#9333ea] to-[#ec4899] px-8 py-3 text-base font-semibold shadow-[0_0_35px_rgba(236,72,153,0.45)]"
+              style={{ fontFamily: "Inter, sans-serif" }}
             >
               Request Demo
             </motion.a>
             <a
               href="#how"
-              className="rounded-full border border-white/20 bg-white/5 px-8 py-3 text-base font-medium backdrop-blur"
+              className="rounded-full border border-white/20 bg-[linear-gradient(135deg,rgba(255,255,255,0.1)_0%,rgba(255,255,255,0.05)_100%)] px-8 py-3 text-base font-medium backdrop-blur-[20px]"
+              style={{ fontFamily: "Inter, sans-serif" }}
             >
-              See How It Works
+              View Workflow
             </a>
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55, duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+            className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-3 md:grid-cols-4"
+          >
+            {[
+              ["100+", "Psychologists onboarded"],
+              ["$700/mo", "Transaction volume"],
+              ["2", "Active chains"],
+              ["Live", "Shipping cadence"],
+            ].map(([value, label]) => (
+              <div
+                key={label}
+                className="rounded-xl border border-white/15 bg-[linear-gradient(135deg,rgba(255,255,255,0.1)_0%,rgba(255,255,255,0.05)_100%)] px-4 py-3 backdrop-blur-[20px]"
+              >
+                <p className="text-2xl font-bold text-[#f0a4ff]" style={{ fontFamily: "Jura, sans-serif" }}>{value}</p>
+                <p className="text-xs text-white/70" style={{ fontFamily: "Inter, sans-serif" }}>{label}</p>
+              </div>
+            ))}
+          </motion.div>
         </motion.div>
       </section>
 
