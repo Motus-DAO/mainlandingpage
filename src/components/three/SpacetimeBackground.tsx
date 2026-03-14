@@ -175,8 +175,8 @@ const SpacetimeBackground: React.FC<SpacetimeBackgroundProps> = ({ className = '
   }, [colorTheme]);
 
   return (
-    <div className={`fixed inset-0 w-full h-full ${className}`}>
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+    <div className={`relative w-full h-full ${className}`}>
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />
       {children && <div className="relative z-10 w-full h-full">{children}</div>}
     </div>
   );
