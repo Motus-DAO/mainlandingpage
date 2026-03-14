@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 
@@ -31,8 +31,18 @@ function SectionReveal({
 function HeroCanvas() {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setReducedMotion(mq.matches);
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    if (reducedMotion) return;
     if (!mountRef.current || !canvasRef.current) return;
 
     const width = mountRef.current.clientWidth;
@@ -50,7 +60,7 @@ function HeroCanvas() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    const particlesCount = 1600;
+    const particlesCount = 2000;
     const positions = new Float32Array(particlesCount * 3);
 
     for (let i = 0; i < particlesCount * 3; i++) {
@@ -64,7 +74,7 @@ function HeroCanvas() {
       color: 0x9333ea,
       size: 0.025,
       transparent: true,
-      opacity: 0.55,
+      opacity: 0.6,
     });
 
     const particles = new THREE.Points(particlesGeometry, particlesMaterial);
@@ -82,7 +92,7 @@ function HeroCanvas() {
     let frame = 0;
     const animate = () => {
       frame = requestAnimationFrame(animate);
-      particles.rotation.y += 0.00035;
+      particles.rotation.y += 0.0002;
       particles.rotation.x += 0.0001;
       renderer.render(scene, camera);
     };
@@ -97,7 +107,9 @@ function HeroCanvas() {
       particlesMaterial.dispose();
       renderer.dispose();
     };
-  }, []);
+  }, [reducedMotion]);
+
+  if (reducedMotion) return null;
 
   return (
     <div ref={mountRef} className="absolute inset-0 z-0 pointer-events-none">
@@ -113,17 +125,12 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#000000] text-[#f5f5ff]">
-      <style jsx>{`
-        .hero-headline {
-          font-family: 'Jura', sans-serif !important;
-        }
-      `}</style>
       <section className="relative flex min-h-screen items-center overflow-hidden px-6 py-24 md:px-12">
         <HeroCanvas />
         <div className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(60% 60% at 20% 20%, rgba(99, 102, 241, 0.18), transparent 60%), radial-gradient(60% 60% at 80% 30%, rgba(236, 72, 153, 0.16), transparent 60%), radial-gradient(70% 70% at 50% 80%, rgba(147, 51, 234, 0.18), transparent 60%)",
+              "radial-gradient(circle 600px at 30% 40%, rgba(147,51,234,0.18), transparent 70%), radial-gradient(circle 400px at 70% 60%, rgba(236,72,153,0.12), transparent 70%)",
           }} />
 
         <motion.div
@@ -145,8 +152,8 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
-            className="hero-headline mx-auto max-w-4xl text-4xl font-extrabold leading-tight md:text-7xl"
-            style={{ fontFamily: "Jura, sans-serif" }}
+            className="mx-auto max-w-4xl text-4xl font-extrabold leading-tight md:text-7xl"
+            style={{ fontFamily: "var(--font-heading), Jura, sans-serif" }}
           >
             Reduce Operational Drag. Protect Client Trust. Scale Your Practice.
           </motion.h1>
@@ -164,8 +171,16 @@ export default function Home() {
             <motion.a
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
+              animate={{
+                boxShadow: [
+                  "0 0 20px rgba(147,51,234,0.3)",
+                  "0 0 40px rgba(147,51,234,0.5)",
+                  "0 0 20px rgba(147,51,234,0.3)",
+                ],
+              }}
+              transition={{ duration: 2.5, ease: "easeInOut", repeat: Infinity }}
               href="#cta"
-              className="rounded-full bg-gradient-to-r from-[#9333ea] to-[#ec4899] px-8 py-3 text-base font-semibold shadow-[0_0_35px_rgba(236,72,153,0.45)]"
+              className="rounded-full bg-gradient-to-r from-[#9333ea] to-[#ec4899] px-8 py-3 text-base font-semibold"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               Request Demo

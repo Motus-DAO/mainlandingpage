@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { DM_Sans, Syne } from "next/font/google";
+import { Inter, Jura } from "next/font/google";
 import "./globals.css";
 
-const syne = Syne({
-  variable: "--font-syne",
+const jura = Jura({
+  variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["500", "700", "800"],
+  weight: ["500", "600", "700"],
 });
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const inter = Inter({
+  variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${syne.variable} ${dmSans.variable} antialiased`}>
+      <body className={`${jura.variable} ${inter.variable} antialiased`}>
         {children}
       </body>
     </html>
